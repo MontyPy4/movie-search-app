@@ -23,7 +23,9 @@ MONGODB_URL_EDIT = os.getenv(
     'mongodb://ich_editor:verystrongpassword@mongo.itcareerhub.de/?readPreference=primary&ssl=false&authMechanism=DEFAULT&authSource=ich_edit'
 )
 MONGODB_DATABASE = os.getenv('MONGODB_DATABASE', 'ich')
-MONGODB_COLLECTION = os.getenv('MONGODB_COLLECTION', 'final_project_010825_daryna_abalmasova')
+MONGODB_COLLECTION = os.getenv(
+    'MONGODB_COLLECTION',
+    'final_project_010825_daryna_abalmasova')
 
 # Search Parameters
 RESULTS_PER_PAGE = 10
