@@ -9,6 +9,7 @@ if sys.platform == 'win32':
     sys.stdout.reconfigure(encoding='utf-8')
 
 from typing import Optional
+import msvcrt
 
 from mysql_connector import (
     get_all_genres, get_year_range, search_by_keyword,
@@ -56,15 +57,47 @@ def search_keyword_menu():
         
         max_pages = (total_count + RESULTS_PER_PAGE - 1) // RESULTS_PER_PAGE
         
-        if page >= max_pages:
-            print("\n✓ Вы просмотрели все результаты.")
-            break
+        # Navigation instructions
+        print("\n" + "─" * 60)
+        print("Навигация:")
+        if page < max_pages:
+            print("  → (стрелка вправо)  - следующая страница")
+        if page > 1:
+            print("  ← (стрелка влево)   - предыдущая страница")
+        print("  ↓ (стрелка вниз)    - вернуться в главное меню")
+        print("─" * 60)
+        print("\n⌨️  Нажмите стрелку на клавиатуре...")
         
-        choice = input("\nЖелаете ли вы просмотреть следующие 10 результатов? (д/н): ").strip().lower()
-        if choice in ['д', 'да', 'yes', 'y']:
-            page += 1
-        else:
-            break
+        # Wait for arrow key
+        while True:
+            if msvcrt.kbhit():
+                key = msvcrt.getch()
+                
+                # Arrow keys send two bytes: 224 (0xe0) or 0 (0x00) followed by direction code
+                if key in (b'\xe0', b'\x00'):  # Special key prefix
+                    key = msvcrt.getch()
+                    
+                    if key == b'M':  # Right arrow (0x4D)
+                        if page < max_pages:
+                            page += 1
+                            break
+                        else:
+                            print("\n❌ Это последняя страница.")
+                    
+                    elif key == b'K':  # Left arrow (0x4B)
+                        if page > 1:
+                            page -= 1
+                            break
+                        else:
+                            print("\n❌ Это первая страница.")
+                    
+                    elif key == b'P':  # Down arrow (0x50)
+                        print("\n↩️  Возврат в главное меню...")
+                        return
+                
+                elif key == b'\r':  # Enter key - also exit
+                    print("\n↩️  Возврат в главное меню...")
+                    return
 
 
 @log_function_call
@@ -141,15 +174,47 @@ def search_genre_years_menu():
         
         max_pages = (total_count + RESULTS_PER_PAGE - 1) // RESULTS_PER_PAGE
         
-        if page >= max_pages:
-            print("\n✓ Вы просмотрели все результаты.")
-            break
+        # Navigation instructions
+        print("\n" + "─" * 60)
+        print("Навигация:")
+        if page < max_pages:
+            print("  → (стрелка вправо)  - следующая страница")
+        if page > 1:
+            print("  ← (стрелка влево)   - предыдущая страница")
+        print("  ↓ (стрелка вниз)    - вернуться в главное меню")
+        print("─" * 60)
+        print("\n⌨️  Нажмите стрелку на клавиатуре...")
         
-        choice = input("\nЖелаете ли вы просмотреть следующие 10 результатов? (д/н): ").strip().lower()
-        if choice in ['д', 'да', 'yes', 'y']:
-            page += 1
-        else:
-            break
+        # Wait for arrow key
+        while True:
+            if msvcrt.kbhit():
+                key = msvcrt.getch()
+                
+                # Arrow keys send two bytes: 224 (0xe0) or 0 (0x00) followed by direction code
+                if key in (b'\xe0', b'\x00'):  # Special key prefix
+                    key = msvcrt.getch()
+                    
+                    if key == b'M':  # Right arrow (0x4D)
+                        if page < max_pages:
+                            page += 1
+                            break
+                        else:
+                            print("\n❌ Это последняя страница.")
+                    
+                    elif key == b'K':  # Left arrow (0x4B)
+                        if page > 1:
+                            page -= 1
+                            break
+                        else:
+                            print("\n❌ Это первая страница.")
+                    
+                    elif key == b'P':  # Down arrow (0x50)
+                        print("\n↩️  Возврат в главное меню...")
+                        return
+                
+                elif key == b'\r':  # Enter key - also exit
+                    print("\n↩️  Возврат в главное меню...")
+                    return
 
 
 @log_function_call
